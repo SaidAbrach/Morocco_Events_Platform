@@ -2,8 +2,8 @@
 
 import { CreateCategoryParams } from "@/types"
 import { connectToDatabse } from "../database"
-import { handleError } from "../utils";
-import Category from "../database/models/category.model";
+import { handleError } from "../utils"
+import Category from "../database/models/category.model"
 
 export const createCategory = async ({ categoryName } :CreateCategoryParams) => {
     try {

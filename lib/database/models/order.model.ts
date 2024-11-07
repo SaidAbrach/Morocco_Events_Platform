@@ -49,4 +49,4 @@ const OrderSchema = new Schema({
 
 const Order = models.Order || model('Order', OrderSchema)
 
-export default Order
+export default Order;
