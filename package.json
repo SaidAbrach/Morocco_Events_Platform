@@ -11,9 +11,15 @@
   "dependencies": {
     "@clerk/clerk-sdk-node": "^5.0.60",
     "@clerk/nextjs": "^6.2.1",
+    "@hookform/resolvers": "^3.9.1",
+    "@radix-ui/react-alert-dialog": "^1.1.2",
+    "@radix-ui/react-checkbox": "^1.1.2",
     "@radix-ui/react-dialog": "^1.1.2",
+    "@radix-ui/react-label": "^2.1.0",
+    "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
+    "@types/react-datepicker": "^6.2.0",
     "@uploadthing/react": "^7.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -23,11 +29,14 @@
     "next": "15.0.2",
     "query-string": "^9.1.1",
     "react": "^18.3.1",
+    "react-datepicker": "^7.5.0",
     "react-dom": "^18.3.1",
-    "svix": "^1.37.0",
+    "react-hook-form": "^7.53.1",
+    "svix": "^1.39.0",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
-    "uploadthing": "^7.2.0"
+    "uploadthing": "^7.2.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20",
