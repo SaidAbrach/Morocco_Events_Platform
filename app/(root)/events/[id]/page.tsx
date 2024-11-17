@@ -1,6 +1,6 @@
 import { getEventById } from '@/lib/actions/event.actions'
 import { formatDateTime } from '@/lib/utils';
-import { SearchParamProps } from '@/types'
+import { SearchParamProps } from '@/types/index'
 import Image from 'next/image';
 
 const EventDetails = async ({params: { id }}: SearchParamProps) => {
