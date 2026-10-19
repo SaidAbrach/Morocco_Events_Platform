@@ -24,17 +24,17 @@ import { IEvent } from "@/lib/database/models/event.model"
 
 
 type EventFormProps = {
-  userId: string
   type: "Create" | "Update"
   event?: IEvent,
   eventId?: string
 }
 
-const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
+const EventForm = ({ type, event, eventId }: EventFormProps) => {
   const [files, setFiles] = useState<File[]>([])
   const initialValues = event && type === 'Update' 
     ? { 
-      ...event, 
+      ...event,
+      categoryId: event.category._id.toString(),
       startDateTime: new Date(event.startDateTime), 
       endDateTime: new Date(event.endDateTime) 
     }
@@ -49,23 +49,24 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
   })
  
   async function onSubmit(values: z.infer<typeof eventFormSchema>) {
+    form.clearErrors('root');
     let uploadedImageUrl = values.imageUrl;
 
     if(files.length > 0) {
-      const uploadedImages = await startUpload(files)
-
-      if(!uploadedImages) {
+      try {
+        const uploadedImages = await startUpload(files)
+        if(!uploadedImages?.length) throw new Error('Upload failed')
+        uploadedImageUrl = uploadedImages[0].url
+      } catch {
+        form.setError('root', { message: 'Image upload failed. Please try again.' });
         return
       }
-
-      uploadedImageUrl = uploadedImages[0].url
     }
 
     if(type === 'Create') {
       try {
         const newEvent = await createEvent({
           event: { ...values, imageUrl: uploadedImageUrl },
-          userId,
           path: '/profile'
         })
 
@@ -74,7 +75,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
           router.push(`/events/${newEvent._id}`)
         }
       } catch (error) {
-        console.log(error);
+        form.setError('root', { message: 'Unable to save this event. Check your access and try again.' });
       }
     }
 
@@ -86,7 +87,6 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
 
       try {
         const updatedEvent = await updateEvent({
-          userId,
           event: { ...values, imageUrl: uploadedImageUrl, _id: eventId },
           path: `/events/${eventId}`
         })
@@ -96,7 +96,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
           router.push(`/events/${updatedEvent._id}`)
         }
       } catch (error) {
-        console.log(error);
+        form.setError('root', { message: 'Unable to save this event. Check your access and try again.' });
       }
     }
   }
@@ -104,6 +104,9 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
+        {form.formState.errors.root && (
+          <p role="alert" className="text-red-600">{form.formState.errors.root.message}</p>
+        )}
         <div className="flex flex-col gap-5 md:flex-row">
           <FormField
             control={form.control}
