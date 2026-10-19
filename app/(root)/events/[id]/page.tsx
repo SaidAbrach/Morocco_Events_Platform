@@ -3,13 +3,11 @@ import { formatDateTime } from '@/lib/utils';
 import Image from 'next/image';
 
 interface EventDetailsProps {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 }
 
 const EventDetails = async ({ params }: EventDetailsProps) => {
-  const { id } = params;
+  const { id } = await params;
 
   const event = await getEventById(id);
 
